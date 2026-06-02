@@ -122,8 +122,6 @@ lvgl:
             y: 350
             text: "Maintenance: --"
 
-    - id: main_page
-      widgets:
         - label:
             id: display_time
             align: TOP_RIGHT
