@@ -1,404 +1,123 @@
 lvgl:
-  top_layer:
-    widgets:
-    
-      # Temperature
-      - label:
-          text: "-° / -°"
-          id: temperatures
-          styles: roboto15_style
-          align: top_left
-          x: 8
-          y: 4
-          text_color: 0xFFFFFF
-
-      # Clock
-      - label:
-          text: "--:--"
-          id: display_time
-          styles: roboto15_style
-          align: top_mid
-          x: 0
-          y: 4
-          text_align: center
-          text_color: 0xFFFFFF
-          
   pages:
     - id: main_page
-      layout: 
-        type: flex
-        flex_flow: column_wrap
-      width: 100%
-      bg_color: Black
-      bg_opa: cover
-      pad_top: 30
-      pad_bottom: 5
-      pad_left: 5
-      pad_right: 5
-      
       widgets:
-      
-        # Office Features Scene
-        - button: 
-            height: $button_height_single
-            width: $button_width
-            checkable: true
-            id: office_scene_features_button
-            styles: control
-            widgets:
-              - label:
-                  text_font: $icon_font
-                  align: top_left
-                  id: scene_features_icon                
-                  text: $ledstrip
-              - label:
-                  align: bottom_left
-                  id: scene_features_label
-                  text: "Features"
-            on_press:
-              - homeassistant.service:
-                  service: switch.toggle
-                  data:
-                    entity_id: switch.office_features_stateful_scene
+        - label:
+            align: TOP_MID
+            y: 20
+            text: "Home Panel"
 
-        # Office Calls Scene
-        - button: 
-            height: $button_height_single
-            width: $button_width
-            checkable: true
-            id: office_scene_calls_button
-            styles: control
+        - button:
+            id: external_garage_button
+            x: 40
+            y: 90
+            width: 220
+            height: 90
             widgets:
               - label:
-                  text_font: $icon_font
-                  align: top_left
-                  id: office_scene_calls_icon                
-                  text: $videocall
-              - label:
-                  align: bottom_left
-                  id: office_scene_calls_label
-                  text: "Calls"
-            on_press:
-              - homeassistant.service:
-                  service: switch.toggle
-                  data:
-                    entity_id: switch.office_calls_stateful_scene
-
-        # Office Evening Scene
-        - button: 
-            height: $button_height_single
-            width: $button_width
-            checkable: true
-            id: office_scene_evening_button
-            styles: control
-            widgets:
-              - label:
-                  text_font: $icon_font
-                  align: top_left
-                  id: office_scene_evening_icon                
-                  text: $nightlight
-              - label:
-                  align: bottom_left
-                  id: office_scene_evening_label
-                  text: "Evening"
-            on_press:
-              - homeassistant.service:
-                  service: switch.toggle
-                  data:
-                    entity_id: switch.office_evening_stateful_scene
-
-        # Office Dimmed Scene
-        - button: 
-            height: $button_height_single
-            width: $button_width
-            checkable: true
-            id: office_scene_dimmed_button
-            styles: control
-            widgets:
-              - label:
-                  text_font: $icon_font
-                  align: top_left
-                  id: office_scene_dimmed_icon                
-                  text: $nightlight
-              - label:
-                  align: bottom_left
-                  id: office_scene_dimmed_label
-                  text: "Dimmed"
-            on_press:
-              - homeassistant.service:
-                  service: switch.toggle
-                  data:
-                    entity_id: switch.office_dimmed_stateful_scene
-
-        # Office Blind 100%
-        - button: 
-            height: $button_height_single
-            width: $button_width
-            checkable: true
-            id: office_blind_open_button
-            styles: control
-            widgets:
-              - label:
-                  text_font: $icon_font
-                  align: top_left
-                  text: $blinds_open
-              - label:
-                  align: bottom_left
-                  text: "Open"
+                  id: external_garage_label
+                  align: CENTER
+                  text: "External Garage"
             on_click:
-              - homeassistant.service:
-                  service: cover.set_cover_position
+              - homeassistant.action:
+                  action: cover.toggle
                   data:
-                    entity_id: cover.office_blind
-                    position: "100"
+                    entity_id: cover.external_garage
 
-        # Office Blind 66%
-        - button: 
-            height: $button_height_single
-            width: $button_width
-            checkable: true
-            id: office_blind_66_button
-            styles: control
+        - button:
+            id: internal_garage_button
+            x: 290
+            y: 90
+            width: 220
+            height: 90
             widgets:
               - label:
-                  text_font: $icon_font
-                  align: top_left
-                  text: $blinds_open
-              - label:
-                  align: bottom_left
-                  text: "Semi Open"
+                  id: internal_garage_label
+                  align: CENTER
+                  text: "Internal Garage"
             on_click:
-              - homeassistant.service:
-                  service: cover.set_cover_position
+              - homeassistant.action:
+                  action: cover.toggle
                   data:
-                    entity_id: cover.office_blind
-                    position: "66"
+                    entity_id: cover.internal_garage
 
-        # Office Blind 33%
-        - button: 
-            height: $button_height_single
-            width: $button_width
+        - button:
+            id: outside_lights_button
+            x: 540
+            y: 90
+            width: 220
+            height: 90
             checkable: true
-            id: office_blind_33_button
-            styles: control
             widgets:
               - label:
-                  text_font: $icon_font
-                  align: top_left
-                  text: $blinds_open
-              - label:
-                  align: bottom_left
-                  text: "Semi Closed"
+                  align: CENTER
+                  text: "Outside Lights"
             on_click:
-              - homeassistant.service:
-                  service: cover.set_cover_position
+              - homeassistant.action:
+                  action: light.toggle
                   data:
-                    entity_id: cover.office_blind
-                    position: "33"
+                    entity_id: light.outside_lights
 
-        # Office Blind 0%
-        - button: 
-            height: $button_height_single
-            width: $button_width
+        - button:
+            id: garage_floor_lights_button
+            x: 40
+            y: 210
+            width: 220
+            height: 90
             checkable: true
-            id: office_blind_close_button
-            styles: control
             widgets:
               - label:
-                  text_font: $icon_font
-                  align: top_left
-                  text: $blinds_closed
-              - label:
-                  align: bottom_left
-                  text: "Close"
+                  align: CENTER
+                  text: "Garage Lights"
             on_click:
-              - homeassistant.service:
-                  service: cover.set_cover_position
+              - homeassistant.action:
+                  action: light.toggle
                   data:
-                    entity_id: cover.office_blind
-                    position: "0"
+                    entity_id: light.garage_floor_lights
 
-
-        # 3d Printer
-        - button: 
-            height: $button_height_single
-            width: $button_width
-            checkable: true
-            id: printer_power_button
-            styles: control
-            widgets:
-              # Icon (shown when OFF)
-              - label:
-                  text_font: $icon_font
-                  align: top_left
-                  id: printer_power_icon
-                  text: $printer
-              # Progress (shown when ON)
-              - obj:
-                  align: top_left
-                  id: print_progress_container
-                  height: SIZE_CONTENT
-                  width: SIZE_CONTENT
-                  clickable: false
-                  layout:
-                    type: flex
-                    flex_flow: row
-                    flex_align_cross: end
-                  bg_opa: TRANSP
-                  border_width: 0
-                  pad_all: 0
-                  hidden: true
-                  widgets:
-                    - label:
-                        text_font: roboto36_font
-                        text_color: 0xFFFFFF
-                        id: print_progress_label
-                        text: "--"
-                    - label:
-                        text_font: roboto17_font
-                        text_color: 0xFFFFFF
-                        text: "%"
-              - label:
-                  align: bottom_left
-                  text: "Printer"
-            on_click:
-              - homeassistant.service:
-                  service: switch.toggle
-                  data:
-                    entity_id: switch.office_3d_printer_power
-
-        # Filament Heater
-        - button: 
-            height: $button_height_single
-            width: $button_width
-            checkable: true
-            id: filament_heater_button
-            styles: control
-            widgets:
-              # Icon (shown when OFF)
-              - label:
-                  text_font: $icon_font
-                  align: top_left
-                  id: filament_heater_icon
-                  text: $filament
-              # Humidity (shown when ON)
-              - obj:
-                  align: top_left
-                  id: dryer_humidity_container
-                  height: SIZE_CONTENT
-                  width: SIZE_CONTENT
-                  clickable: false
-                  layout:
-                    type: flex
-                    flex_flow: row
-                    flex_align_cross: end
-                  bg_opa: TRANSP
-                  border_width: 0
-                  pad_all: 0
-                  hidden: true
-                  widgets:
-                    - label:
-                        text_font: roboto36_font
-                        text_color: 0xFFFFFF
-                        id: dryer_humidity_label
-                        text: "--"
-                    - label:
-                        text_font: roboto17_font
-                        text_color: 0xFFFFFF
-                        text: "%"
-              - label:
-                  align: bottom_left
-                  text: "Dryer"
-            on_click:
-              - homeassistant.service:
-                  service: switch.toggle
-                  data:
-                    entity_id: switch.office_filament_heater_893b
-
-        # Office Aircon
-        - button: 
-            height: $button_height_single
-            width: $button_width
-            checkable: true
-            id: office_aircon_button
-            styles: control
+        - button:
+            id: all_outside_off_button
+            x: 290
+            y: 210
+            width: 220
+            height: 90
             widgets:
               - label:
-                  text_font: $icon_font
-                  align: top_left
-                  text: $aircon
-              - label:
-                  align: bottom_left
-                  text: "Aircon"
+                  align: CENTER
+                  text: "Outside OFF"
             on_click:
-              - homeassistant.service:
-                  service: script.office_air_conditioner
+              - homeassistant.action:
+                  action: light.turn_off
+                  data:
+                    entity_id: light.outside_lights
 
-        # Battery Charger
-        - button: 
-            height: $button_height_single
-            width: $button_width
-            checkable: true
-            id: battery_charger_button
-            styles: control
+        - button:
+            id: restart_panel_button
+            x: 540
+            y: 210
+            width: 220
+            height: 90
             widgets:
               - label:
-                  text_font: $icon_font
-                  align: top_left
-                  id: battery_charger_icon
-                  text: $battery
-              - label:
-                  align: bottom_left
-                  id: battery_charger_label
-                  text: "Charger"
+                  align: CENTER
+                  text: "Restart Panel"
             on_click:
-              - homeassistant.service:
-                  service: switch.toggle
-                  data:
-                    entity_id: switch.battery_charger
+              - button.press: restart_button
 
-        # Storage Lights
-        - button: 
-            height: $button_height_single
-            width: $button_width
-            checkable: true
-            id: storage_lights_button
-            styles: control
-            widgets:
-              - label:
-                  text_font: $icon_font
-                  align: top_left
-                  id: storage_lights_icon
-                  text: $package
-              - label:
-                  align: bottom_left
-                  id: storage_lights_label
-                  text: "Storage"
-            on_click:
-              - homeassistant.service:
-                  service: light.toggle
-                  data:
-                    entity_id: light.office_storage
+        - label:
+            id: home_temperature_label
+            x: 40
+            y: 350
+            text: "Temp: --°C"
 
-        # Network Rack
-        - button: 
-            height: $button_height_single
-            width: $button_width
-            checkable: true
-            id: network_rack_button
-            styles: control
-            widgets:
-              - label:
-                  text_font: $icon_font
-                  align: top_left
-                  id: network_rack_icon
-                  text: $network
-              - label:
-                  align: bottom_left
-                  id: network_rack_label
-                  text: "Network Rack"
-            on_click:
-              - homeassistant.service:
-                  service: light.toggle
-                  data:
-                    entity_id: light.office_network_rack
+        - label:
+            id: weather_label
+            x: 40
+            y: 395
+            text: "Weather: --"
+
+        - label:
+            id: maintenance_label
+            x: 290
+            y: 350
+            text: "Maintenance: --"
