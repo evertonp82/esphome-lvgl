@@ -121,3 +121,16 @@ lvgl:
             x: 290
             y: 350
             text: "Maintenance: --"
+
+    - id: main_page
+      widgets:
+        - label:
+            id: display_time
+            align: TOP_RIGHT
+            x: -20
+            y: 15
+            text: "--:--"
+
+        - label:
+            align: CENTER
+            text: "ESPHome LCD 7"
