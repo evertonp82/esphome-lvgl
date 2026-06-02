@@ -60,14 +60,28 @@ sensor:
   #   lvgl.yaml → temperatures label (id: temperatures)
   # ===========================================================================
   - platform: homeassistant
-    entity_id: sensor.office_temperature
-    id: office_temperature
-    on_value:
-      - lvgl.label.update:
-          id: temperatures
-          text:
-            format: "%d° / %d°"
-            args: [ '(int)round(id(outdoor_temperature).state)', '(int)round(x)' ]
+    id: garage_floor_lights_state
+    entity_id: light.garage_floor_lights
+    trigger_on_initial_state: true
+    on_state:
+      then:
+        - lvgl.widget.update:
+            id: garage_floor_lights_button
+            state:
+              checked: !lambda return x;
+
+  - platform: homeassistant
+    id: light.outside_lights_state
+    entity_id: light.outside_lights
+    trigger_on_initial_state: true
+    on_state:
+      then:
+        - lvgl.widget.update:
+            id: light.outside_lights_button
+            state:
+              checked: !lambda return x;
+
+              
 
   # ===========================================================================
   # SENSOR: Outdoor Temperature
@@ -92,8 +106,8 @@ sensor:
   #   lvgl.yaml → temperatures label (id: temperatures)
   # ===========================================================================
   - platform: homeassistant
-    entity_id: sensor.outdoor_temperature
-    id: outdoor_temperature
+    entity_id: sensor.temp_presence_and_humidity_temperature
+    id: sensor.temp_presence_and_humidity_temperature_state
     on_value:
       - lvgl.label.update:
           id: temperatures
@@ -123,10 +137,10 @@ sensor:
   #   lvgl.yaml → office_blind_open_button, office_blind_66_button,
   #               office_blind_33_button, office_blind_close_button
   # ===========================================================================
-  - platform: homeassistant
-    entity_id: cover.office_blind
-    id: office_blind_position
-    attribute: current_position
+#  - platform: homeassistant
+#    entity_id: cover.office_blind
+#    id: office_blind_position
+#    attribute: current_position
 
   # ===========================================================================
   # SENSOR: Aircon Current Temperature
@@ -141,19 +155,19 @@ sensor:
   # RELATED UI ELEMENT:
   #   lvgl.yaml → aircon_temp_label
   # ===========================================================================
-  - platform: homeassistant
-    entity_id: climate.office_air_conditioner
-    id: aircon_current_temperature
-    attribute: current_temperature
-    on_value:
-      - lvgl.label.update:
-          id: aircon_temp_label
-          text:
-            format: "%.0f°"
-            args: [ 'x' ]
-      - lvgl.arc.update:
-          id: aircon_current_arc
-          value: !lambda return (int)x;
+  #  - platform: homeassistant
+  #    entity_id: climate.office_air_conditioner
+  #    id: aircon_current_temperature
+  #    attribute: current_temperature
+  #    on_value:
+  #      - lvgl.label.update:
+  #          id: aircon_temp_label
+  #          text:
+  #            format: "%.0f°"
+  #            args: [ 'x' ]
+  #      - lvgl.arc.update:
+  #          id: aircon_current_arc
+  #          value: !lambda return (int)x;
 
   # ===========================================================================
   # SENSOR: Aircon Target Temperature
@@ -168,24 +182,24 @@ sensor:
   # RELATED UI ELEMENT:
   #   lvgl.yaml → aircon_set_temp_label
   # ===========================================================================
-  - platform: homeassistant
-    entity_id: climate.office_air_conditioner
-    id: aircon_target_temperature
-    attribute: temperature
-    on_value:
-      - lvgl.label.update:
-          id: aircon_set_temp_label
-          text:
-            format: "%.0f°"
-            args: [ 'x' ]
-      - lvgl.label.update:
-          id: aircon_lab_target_label
-          text:
-            format: "%.0f°"
-            args: [ 'x' ]
-      - lvgl.arc.update:
-          id: aircon_target_arc
-          value: !lambda return (int)x;
+  # - platform: homeassistant
+  #   entity_id: climate.office_air_conditioner
+  #    id: aircon_target_temperature
+  #    attribute: temperature
+  #    on_value:
+  #      - lvgl.label.update:
+  #          id: aircon_set_temp_label
+  #          text:
+  #            format: "%.0f°"
+  #            args: [ 'x' ]
+  #      - lvgl.label.update:
+  #          id: aircon_lab_target_label
+  #          text:
+  #            format: "%.0f°"
+  #            args: [ 'x' ]
+  #      - lvgl.arc.update:
+  #          id: aircon_target_arc
+  #          value: !lambda return (int)x;
 
   # ===========================================================================
   # SENSOR: Heating Current Temperature
@@ -249,44 +263,7 @@ sensor:
   # RELATED UI ELEMENT:
   #   lvgl.yaml → heating_lab_target_label, heating_target_arc
   # ===========================================================================
-  - platform: homeassistant
-    entity_id: climate.office_radiator_thermostat
-    id: heating_target_temperature
-    attribute: temperature
-    on_value:
-      - lvgl.label.update:
-          id: heating_lab_target_label
-          text:
-            format: "%.1f°C"
-            args: [ 'x' ]
-      - lvgl.arc.update:
-          id: heating_track_arc
-          value: !lambda return (int)roundf(x * 2.0f);
-      - lvgl.arc.update:
-          id: heating_target_dot_arc
-          value: !lambda return (int)roundf(x * 2.0f);
-      - lvgl.arc.update:
-          id: heating_delta_arc
-          value: !lambda |-
-            float tgt = x;
-            float cur = tgt;
-            if (id(heating_current_temperature).has_state()) {
-              cur = id(heating_current_temperature).state;
-            }
-            int cur_v = (int)roundf(cur * 2.0f);
-            int tgt_v = (int)roundf(tgt * 2.0f);
-            return cur_v > tgt_v ? cur_v : tgt_v;
-      - lvgl.arc.update:
-          id: heating_mask_arc
-          value: !lambda |-
-            float tgt = x;
-            float cur = tgt;
-            if (id(heating_current_temperature).has_state()) {
-              cur = id(heating_current_temperature).state;
-            }
-            int cur_v = (int)roundf(cur * 2.0f);
-            int tgt_v = (int)roundf(tgt * 2.0f);
-            return cur_v < tgt_v ? cur_v : tgt_v;
+
 
 # =============================================================================
 # TEXT SENSORS (String Values)
